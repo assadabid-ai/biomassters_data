@@ -31,10 +31,12 @@ def download_file(url, save_path):
 
 # Download all the parts of the zip files
 # Use the current working directory to save the files
+downloaded_files = []  # To keep track of downloaded files
 for url in urls:
     filename = url.split("/")[-1].split("?")[0]  # Extract filename from URL
     file_path = filename  # Save to the current working directory
     download_file(url, file_path)
+    downloaded_files.append(file_path)  # Store the path for later deletion
 
 # Function to unzip a zip file
 def unzip_file(zip_file_path, extract_to_dir):
@@ -53,3 +55,9 @@ if os.path.exists(train_features_zip_path):
 
 if os.path.exists(train_agbm_zip_path):
     unzip_file(train_agbm_zip_path, "train_agbm")
+
+# Delete the downloaded files after unzipping
+for file in downloaded_files:
+    if os.path.exists(file):
+        os.remove(file)
+        print(f"Deleted {file}")
